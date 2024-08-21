@@ -45,4 +45,22 @@ public class TaskController {
         List<TaskDto> tasks = taskService.getTasks();
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<TaskDto>> getPendingTasks() {
+        List<TaskDto> tasks = taskService.getPendingTasks();
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
+    @GetMapping("/accepted")
+    public ResponseEntity<List<TaskDto>> getAcceptedTasks() {
+        List<TaskDto> tasks = taskService.getAcceptedTasks();
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/accept")
+    public ResponseEntity<TaskDto> acceptTask(@PathVariable Long id) {
+        TaskDto acceptedTask = taskService.acceptTask(id);
+        return new ResponseEntity<>(acceptedTask, HttpStatus.OK);
+    }
 }

@@ -44,4 +44,19 @@ public class TaskService {
         return taskRepository.findAll().stream().map(taskMapper::toDto).toList();
     }
 
+    public List<TaskDto> getPendingTasks() {
+        return taskMapper.toDto(taskRepository.findByStatus(TaskStatus.PENDING));
+    }
+
+    public List<TaskDto> getAcceptedTasks() {
+        return taskMapper.toDto(taskRepository.findByStatus(TaskStatus.ACCEPTED));
+    }
+
+    public TaskDto acceptTask(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+        task.setStatus(TaskStatus.ACCEPTED);
+        Task updatedTask = taskRepository.save(task);
+        return taskMapper.toDto(updatedTask);
+    }
+
 }
