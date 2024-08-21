@@ -1,5 +1,6 @@
 package com.fil.rouge.repository;
 
+import com.fil.rouge.emuns.Categories;
 import com.fil.rouge.emuns.TaskStatus;
 import com.fil.rouge.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByTitleContainingOrDescriptionContaining(String keyword, String keyword1);
 
     List<Task> findByStatus(TaskStatus status);
+
+    List<Task> findByCategory(Categories category);
 }

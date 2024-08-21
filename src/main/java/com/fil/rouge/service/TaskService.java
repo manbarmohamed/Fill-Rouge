@@ -2,6 +2,7 @@ package com.fil.rouge.service;
 
 
 import com.fil.rouge.dto.TaskDto;
+import com.fil.rouge.emuns.Categories;
 import com.fil.rouge.emuns.TaskStatus;
 import com.fil.rouge.exception.TaskNotFoundException;
 import com.fil.rouge.mapper.TaskMapper;
@@ -57,6 +58,11 @@ public class TaskService {
         task.setStatus(TaskStatus.ACCEPTED);
         Task updatedTask = taskRepository.save(task);
         return taskMapper.toDto(updatedTask);
+    }
+
+    public List<TaskDto> getTasksByCategory(Categories category) {
+        List<Task> tasks = taskRepository.findByCategory(category);
+        return tasks.stream().map(taskMapper::toDto).toList();
     }
 
 }

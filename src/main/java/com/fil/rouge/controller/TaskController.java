@@ -1,6 +1,7 @@
 package com.fil.rouge.controller;
 
 import com.fil.rouge.dto.TaskDto;
+import com.fil.rouge.emuns.Categories;
 import com.fil.rouge.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -62,5 +63,11 @@ public class TaskController {
     public ResponseEntity<TaskDto> acceptTask(@PathVariable Long id) {
         TaskDto acceptedTask = taskService.acceptTask(id);
         return new ResponseEntity<>(acceptedTask, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<TaskDto>> getTasksByCategory(@PathVariable Categories category) {
+        List<TaskDto> tasks = taskService.getTasksByCategory(category);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 }
