@@ -1,4 +1,7 @@
 package com.fil.rouge.repository;
 
-public interface TaskRepository {
+import com.fil.rouge.model.Task;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TaskRepository extends JpaRepository<Task, Long> {
 }
