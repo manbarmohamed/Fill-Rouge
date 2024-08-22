@@ -49,4 +49,12 @@ public class ApplicationService {
         Application updatedApplication = applicationRepository.save(application);
         return applicationMapper.toDto(updatedApplication);
     }
+
+    public ApplicationDto rejectApplication(Long id) {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
+        application.setStatus(ApplicationStatus.REJECTED);
+        Application updatedApplication = applicationRepository.save(application);
+        return applicationMapper.toDto(updatedApplication);
+    }
 }

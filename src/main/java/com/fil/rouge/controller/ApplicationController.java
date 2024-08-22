@@ -26,4 +26,10 @@ public class ApplicationController {
         ApplicationDto acceptedApplication = applicationService.acceptApplication(id);
         return new ResponseEntity<>(acceptedApplication, HttpStatus.OK);
     }
+
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<ApplicationDto> rejectApplication(@PathVariable Long id) {
+        ApplicationDto rejectedApplication = applicationService.rejectApplication(id);
+        return new ResponseEntity<>(rejectedApplication, HttpStatus.OK);
+    }
 }
