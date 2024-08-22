@@ -1,6 +1,7 @@
 package com.fil.rouge.controller;
 
 import com.fil.rouge.dto.ReviewDto;
+import com.fil.rouge.dto.ReviewUpdateDto;
 import com.fil.rouge.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateDto reviewDto) {
         ReviewDto updatedReview = reviewService.updateReview(id, reviewDto);
         return ResponseEntity.ok(updatedReview);
     }

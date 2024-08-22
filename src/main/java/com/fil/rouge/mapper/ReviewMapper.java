@@ -2,6 +2,7 @@ package com.fil.rouge.mapper;
 
 
 import com.fil.rouge.dto.ReviewDto;
+import com.fil.rouge.dto.ReviewUpdateDto;
 import com.fil.rouge.model.Review;
 import org.mapstruct.*;
 
@@ -23,5 +24,10 @@ public interface ReviewMapper {
     List<Review> toEntityList(List<ReviewDto> dtoList);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Review partialUpdate(ReviewDto dto, @MappingTarget Review entity);
+
+    void partialUpdate(ReviewUpdateDto updateDto, @MappingTarget Review entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+
+    Review toEntity(ReviewUpdateDto updateDto);
 }

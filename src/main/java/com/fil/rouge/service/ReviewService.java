@@ -1,6 +1,7 @@
 package com.fil.rouge.service;
 
 import com.fil.rouge.dto.ReviewDto;
+import com.fil.rouge.dto.ReviewUpdateDto;
 import com.fil.rouge.exception.ClientNotFoundException;
 import com.fil.rouge.exception.ReviewNotFoundException;
 import com.fil.rouge.exception.WorkerNotFoundException;
@@ -37,13 +38,12 @@ public class ReviewService {
         return reviewMapper.toDto(review);
     }
 
-    public ReviewDto updateReview(Long id, ReviewDto reviewDto) {
+    public ReviewDto updateReview(Long id, ReviewUpdateDto updateDto) {
 
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
 
-
-        reviewMapper.partialUpdate(reviewDto, review);
+        reviewMapper.partialUpdate(updateDto, review);
         Review updatedReview = reviewRepository.save(review);
         return reviewMapper.toDto(updatedReview);
     }
