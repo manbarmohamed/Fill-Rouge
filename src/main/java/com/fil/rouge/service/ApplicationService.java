@@ -2,6 +2,7 @@ package com.fil.rouge.service;
 
 import com.fil.rouge.dto.ApplicationDto;
 import com.fil.rouge.emuns.ApplicationStatus;
+import com.fil.rouge.exception.ApplicationNotFoundException;
 import com.fil.rouge.exception.TaskNotFoundException;
 import com.fil.rouge.exception.WorkerNotFoundException;
 import com.fil.rouge.mapper.ApplicationMapper;
@@ -39,5 +40,13 @@ public class ApplicationService {
         application = applicationRepository.save(application);
 
         return applicationMapper.toDto(application);
+    }
+
+    public ApplicationDto acceptApplication(Long id) {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
+        application.setStatus(ApplicationStatus.ACCEPTED);
+        Application updatedApplication = applicationRepository.save(application);
+        return applicationMapper.toDto(updatedApplication);
     }
 }

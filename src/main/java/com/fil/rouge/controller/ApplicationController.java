@@ -6,10 +6,7 @@ import com.fil.rouge.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -22,5 +19,11 @@ public class ApplicationController {
     public ResponseEntity<ApplicationDto> submitApplication(@RequestBody ApplicationDto applicationDto) {
         ApplicationDto submittedApplication = applicationService.submitApplication(applicationDto);
         return new ResponseEntity<>(submittedApplication, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}/accept")
+    public ResponseEntity<ApplicationDto> acceptApplication(@PathVariable Long id) {
+        ApplicationDto acceptedApplication = applicationService.acceptApplication(id);
+        return new ResponseEntity<>(acceptedApplication, HttpStatus.OK);
     }
 }
