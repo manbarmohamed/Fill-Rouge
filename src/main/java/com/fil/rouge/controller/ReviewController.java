@@ -2,10 +2,13 @@ package com.fil.rouge.controller;
 
 import com.fil.rouge.dto.ReviewDto;
 import com.fil.rouge.dto.ReviewUpdateDto;
+import com.fil.rouge.dto.ReviewWithClientDto;
 import com.fil.rouge.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -36,5 +39,11 @@ public class ReviewController {
     public ResponseEntity<ReviewDto> getReview(@PathVariable Long id) {
         ReviewDto review = reviewService.getReview(id);
         return ResponseEntity.ok(review);
+    }
+
+    @GetMapping("/worker/{workerId}")
+    public ResponseEntity<List<ReviewWithClientDto>> getReviewsByWorker(@PathVariable("workerId") Long workerId) {
+        List<ReviewWithClientDto> reviews = reviewService.getReviewsByWorker(workerId);
+        return ResponseEntity.ok(reviews);
     }
 }

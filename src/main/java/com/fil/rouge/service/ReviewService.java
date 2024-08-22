@@ -2,6 +2,7 @@ package com.fil.rouge.service;
 
 import com.fil.rouge.dto.ReviewDto;
 import com.fil.rouge.dto.ReviewUpdateDto;
+import com.fil.rouge.dto.ReviewWithClientDto;
 import com.fil.rouge.exception.ClientNotFoundException;
 import com.fil.rouge.exception.ReviewNotFoundException;
 import com.fil.rouge.exception.WorkerNotFoundException;
@@ -14,6 +15,8 @@ import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +61,10 @@ public class ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
         return reviewMapper.toDto(review);
+    }
+
+    public List<ReviewWithClientDto> getReviewsByWorker(Long workerId) {
+        List<Review> reviews = reviewRepository.findByWorkerId(workerId);
+        return reviewMapper.toReviewWithClientDtoList(reviews);
     }
 }
