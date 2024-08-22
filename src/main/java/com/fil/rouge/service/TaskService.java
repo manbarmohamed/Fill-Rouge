@@ -65,4 +65,16 @@ public class TaskService {
         return tasks.stream().map(taskMapper::toDto).toList();
     }
 
+    public TaskDto submitWork(Long taskId) {
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+
+        task.setStatus(TaskStatus.COMPLETED);
+
+        Task updatedTask = taskRepository.save(task);
+
+        return taskMapper.toDto(updatedTask);
+    }
+
 }

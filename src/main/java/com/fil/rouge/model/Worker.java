@@ -15,7 +15,10 @@ import java.util.List;
 public class Worker extends User {
 
 
+    @ElementCollection(targetClass = Skills.class)
+    @CollectionTable(name = "worker_skills", joinColumns = @JoinColumn(name = "worker_id"))
     @Enumerated(EnumType.STRING)
+    @Column(name = "skill")
     private List<Skills> skills;
 
 

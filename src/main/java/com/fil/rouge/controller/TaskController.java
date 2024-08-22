@@ -70,4 +70,10 @@ public class TaskController {
         List<TaskDto> tasks = taskService.getTasksByCategory(category);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
+
+    @PutMapping("/{taskId}/submit-work")
+    public ResponseEntity<TaskDto> submitWork(@PathVariable Long taskId) {
+        TaskDto updatedTask = taskService.submitWork(taskId);
+        return ResponseEntity.ok(updatedTask);
+    }
 }

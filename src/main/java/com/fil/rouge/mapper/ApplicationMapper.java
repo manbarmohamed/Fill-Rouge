@@ -10,7 +10,13 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ApplicationMapper {
+
+    @Mapping(source = "taskId", target = "task.id")
+    @Mapping(source = "workerId", target = "worker.id")
     Application toEntity(ApplicationDto applicationDto);
+
+    @Mapping(source = "task.id", target = "taskId")
+    @Mapping(source = "worker.id", target = "workerId")
     ApplicationDto toDto(Application application);
 
     List<Application> toEntity(List<ApplicationDto> applicationDto);

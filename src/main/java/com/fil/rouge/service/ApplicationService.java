@@ -29,7 +29,7 @@ public class ApplicationService {
         Task task = taskRepository.findById(applicationDto.getTaskId())
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
-        Worker worker = workerRepository.findById(applicationDto.getWorkerId().getId())
+        Worker worker = workerRepository.findById(applicationDto.getWorkerId())
                 .orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
 
         Application application = applicationMapper.toEntity(applicationDto);

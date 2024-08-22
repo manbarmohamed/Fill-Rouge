@@ -20,5 +20,5 @@ public class ApplicationDto {
     private Long taskId;
 
 
-    private Worker workerId;
+    private Long workerId;
 }
