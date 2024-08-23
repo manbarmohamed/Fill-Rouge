@@ -1,6 +1,6 @@
 package com.fil.rouge.model;
 
-import com.fil.rouge.emuns.Skills;
+import com.fil.rouge.emuns.Skill;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class Worker extends User {
 
 
    @Enumerated(EnumType.STRING)
-    private Skills skill;
+    private Skill skill;
 
 
     @OneToMany(mappedBy = "worker")

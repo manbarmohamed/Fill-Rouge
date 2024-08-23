@@ -1,12 +1,10 @@
 package com.fil.rouge.dto;
 
-import com.fil.rouge.emuns.Skills;
+import com.fil.rouge.emuns.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +16,6 @@ public class SignupDto {
     private String username;
     private String password;
     private String companyName; // Only for Client
-    private Skills skill; // Only for Worker
+    private Skill skill; // Only for Worker
 }
 

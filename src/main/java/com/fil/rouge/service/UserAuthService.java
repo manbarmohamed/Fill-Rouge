@@ -3,6 +3,9 @@ package com.fil.rouge.service;
 import com.fil.rouge.dto.JwtResponse;
 import com.fil.rouge.dto.LoginDto;
 import com.fil.rouge.dto.SignupDto;
+import com.fil.rouge.dto.UpdateProfileDto;
+import com.fil.rouge.exception.InvalidPasswordException;
+import com.fil.rouge.exception.UserNotFoundException;
 import com.fil.rouge.mapper.UserMapper;
 import com.fil.rouge.model.Client;
 import com.fil.rouge.model.User;
@@ -57,21 +60,6 @@ public class UserAuthService {
             workerRepository.save(worker);
         }
     }
-
-//    public JwtResponse login(LoginDto loginDto) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-//
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        String jwtToken = jwtUtils.generateToken(userDetails);
-//
-//        User user = (User) userDetailsService.loadUserByUsername(loginDto.getUsername());
-//        String role = user.getClass().getSimpleName().toUpperCase();
-//        System.out.println(role +"rooooooooooooooole");
-//        return new JwtResponse(jwtToken, user.getId(), user.getUsername(), role);
-//    }
-
-
     public JwtResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
@@ -91,5 +79,32 @@ public class UserAuthService {
             throw new UsernameNotFoundException("Invalid user request.");
         }
     }
+
+    public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (updateProfileDto.getOldPassword() != null && updateProfileDto.getNewPassword() != null) {
+            if (!encoder.matches(updateProfileDto.getOldPassword(), user.getPassword())) {
+                throw new InvalidPasswordException("Old password is incorrect");
+            }
+            user.setPassword(encoder.encode(updateProfileDto.getNewPassword()));
+        }
+
+        userMapper.updateUserFromDto(updateProfileDto, user);
+
+        if (user instanceof Client) {
+            Client client = (Client) user;
+            userMapper.updateClientFromDto(updateProfileDto, client);
+            clientRepository.save(client);
+        } else if (user instanceof Worker) {
+            Worker worker = (Worker) user;
+            userMapper.updateWorkerFromDto(updateProfileDto, worker);
+            workerRepository.save(worker);
+        }
+
+        return userRepository.save(user);
+    }
+
 }
 

@@ -1,6 +1,6 @@
 package com.fil.rouge.emuns;
 
-public enum Skills {
+public enum Skill {
 
 
     WEB_DEVELOPMENT,      // Développement web (HTML, CSS, JavaScript, etc.)
