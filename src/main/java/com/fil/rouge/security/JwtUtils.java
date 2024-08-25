@@ -115,10 +115,11 @@ public class JwtUtils {
 //        Map<String, Object> claims = new HashMap<>();
 //        return createToken(claims, username);
 //    }
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, String role) {
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 //.setExpiration(Date.from(Instant.from(now().plus(20, ChronoUnit.DAYS))))

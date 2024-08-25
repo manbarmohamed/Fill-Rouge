@@ -14,6 +14,7 @@ import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.UserRepository;
 import com.fil.rouge.repository.WorkerRepository;
 import com.fil.rouge.security.JwtUtils;
+import jakarta.persistence.DiscriminatorValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,18 +61,44 @@ public class UserAuthService {
             workerRepository.save(worker);
         }
     }
+//    public JwtResponse login(LoginDto loginDto) {
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
+//        );
+//
+//        if (authentication.isAuthenticated()) {
+//            User user =userRepository.findByUsername(loginDto.getUsername());
+//           String token = jwtUtils.generateToken((UserDetails) user);
+//            String role = user.getClass().getSimpleName().toUpperCase();
+//
+//            return  new JwtResponse().builder()
+//                   .token(token)
+//                    .username(user.getUsername())
+//                    .role(role)
+//                    .build();
+//        } else {
+//            throw new UsernameNotFoundException("Invalid user request.");
+//        }
+//    }
+
+
     public JwtResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
         );
 
         if (authentication.isAuthenticated()) {
-            User user =userRepository.findByUsername(loginDto.getUsername());
-           String token = jwtUtils.generateToken((UserDetails) user);
-            String role = user.getClass().getSimpleName().toUpperCase();
+            User user = userRepository.findByUsername(loginDto.getUsername());
 
-            return  new JwtResponse().builder()
-                   .token(token)
+            // Get the role using the DiscriminatorValue annotation
+            DiscriminatorValue roleAnnotation = user.getClass().getAnnotation(DiscriminatorValue.class);
+            String role = roleAnnotation.value();
+
+            // Generate the JWT token with the role
+            String token = jwtUtils.generateToken(user, role);
+
+            return JwtResponse.builder()
+                    .token(token)
                     .username(user.getUsername())
                     .role(role)
                     .build();
@@ -79,6 +106,7 @@ public class UserAuthService {
             throw new UsernameNotFoundException("Invalid user request.");
         }
     }
+
 
     public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {
         User user = userRepository.findById(userId)
