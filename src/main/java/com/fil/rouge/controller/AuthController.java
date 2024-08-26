@@ -7,16 +7,18 @@ import com.fil.rouge.dto.SignupDto;
 import com.fil.rouge.dto.UpdateProfileDto;
 import com.fil.rouge.model.User;
 import com.fil.rouge.service.UserAuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserAuthService authService;
+
+    private final UserAuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupDto signupDto) {

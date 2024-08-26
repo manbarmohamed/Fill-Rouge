@@ -15,47 +15,52 @@ import com.fil.rouge.repository.UserRepository;
 import com.fil.rouge.repository.WorkerRepository;
 import com.fil.rouge.security.JwtUtils;
 import jakarta.persistence.DiscriminatorValue;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 @Service
+@RequiredArgsConstructor
 public class UserAuthService {
 
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private WorkerRepository workerRepository;
+    private final ClientRepository clientRepository;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private JwtUtils jwtUtils;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final WorkerRepository workerRepository;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+
+    private final UserMapper userMapper;
+
+
+    private final JwtUtils jwtUtils;
+
+
+    private final AuthenticationManager authenticationManager;
+
+
+    private final UserDetailsService userDetailsService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public void signup(SignupDto signupDto) {
-        if (signupDto.getCompanyName() != null) { // Client
+        if (signupDto.getCompanyName() != null) {
             Client client = userMapper.signupDtoToClient(signupDto);
             client.setPassword(encoder.encode(signupDto.getPassword()));
             clientRepository.save(client);
-        } else { // Worker
+        } else {
             Worker worker = userMapper.signupDtoToWorker(signupDto);
             worker.setPassword(encoder.encode(signupDto.getPassword()));
             workerRepository.save(worker);
@@ -90,22 +95,18 @@ public class UserAuthService {
         if (authentication.isAuthenticated()) {
             User user = userRepository.findByUsername(loginDto.getUsername());
 
-            // Get the role using the DiscriminatorValue annotation
-            DiscriminatorValue roleAnnotation = user.getClass().getAnnotation(DiscriminatorValue.class);
-            String role = roleAnnotation.value();
-
-            // Generate the JWT token with the role
-            String token = jwtUtils.generateToken(user, role);
+            String token = jwtUtils.generateToken(user.getUsername(),user.getRole());
 
             return JwtResponse.builder()
                     .token(token)
                     .username(user.getUsername())
-                    .role(role)
+                    .role(user.getRole())
                     .build();
         } else {
             throw new UsernameNotFoundException("Invalid user request.");
         }
     }
+
 
 
     public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {

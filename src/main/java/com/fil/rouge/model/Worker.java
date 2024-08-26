@@ -1,5 +1,6 @@
 package com.fil.rouge.model;
 
+import com.fil.rouge.emuns.Role;
 import com.fil.rouge.emuns.Skill;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,4 +27,8 @@ public class Worker extends User {
 
     @OneToMany(mappedBy = "worker")
     private List<Payment> payments;
+
+ public Worker() {
+  this.setRole(Role.WORKER);
+ }
 }
