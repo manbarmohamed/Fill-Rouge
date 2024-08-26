@@ -1,7 +1,5 @@
 package com.fil.rouge.security;
 
-import com.fil.rouge.emuns.Role;
-import com.fil.rouge.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -9,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -56,14 +52,14 @@ public class JwtUtils {
         }
         return false;
     }
+    public String generateToken(UserDetails userDetails, String role) {
 
-    public String generateToken(String username, Role role) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
+                .setSubject(userDetails.getUsername())
                 .claim("role", role)
-//            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .setExpiration(Date.from(Instant.now().plus(20, ChronoUnit.DAYS)))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                //.setExpiration(Date.from(Instant.from(now().plus(20, ChronoUnit.DAYS))))
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }

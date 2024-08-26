@@ -94,13 +94,14 @@ public class UserAuthService {
 
         if (authentication.isAuthenticated()) {
             User user = userRepository.findByUsername(loginDto.getUsername());
-
-            String token = jwtUtils.generateToken(user.getUsername(),user.getRole());
+            DiscriminatorValue roleAnnotation = user.getClass().getAnnotation(DiscriminatorValue.class);
+            String role = roleAnnotation.value();
+            String token = jwtUtils.generateToken(user, role);
 
             return JwtResponse.builder()
                     .token(token)
                     .username(user.getUsername())
-                    .role(user.getRole())
+                    .role(role)
                     .build();
         } else {
             throw new UsernameNotFoundException("Invalid user request.");
