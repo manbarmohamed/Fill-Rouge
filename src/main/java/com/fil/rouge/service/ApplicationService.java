@@ -15,6 +15,8 @@ import com.fil.rouge.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -23,7 +25,7 @@ public class ApplicationService {
     private final TaskRepository taskRepository;
     private final WorkerRepository workerRepository;
     private final ApplicationMapper applicationMapper;
-
+    //private final EmailService emailService;
     public ApplicationDto submitApplication(ApplicationDto applicationDto) {
 
         Task task = taskRepository.findById(applicationDto.getTaskId())
@@ -42,19 +44,26 @@ public class ApplicationService {
         return applicationMapper.toDto(application);
     }
 
-    public ApplicationDto acceptApplication(Long id) {
+    public String acceptApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
         application.setStatus(ApplicationStatus.ACCEPTED);
         Application updatedApplication = applicationRepository.save(application);
-        return applicationMapper.toDto(updatedApplication);
+        //emailService.sendEmail(updatedApplication);
+        return "Application accepted successfully";
     }
 
-    public ApplicationDto rejectApplication(Long id) {
+    public String rejectApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
         application.setStatus(ApplicationStatus.REJECTED);
         Application updatedApplication = applicationRepository.save(application);
-        return applicationMapper.toDto(updatedApplication);
+       //emailService.sendEmail(updatedApplication);
+        return "Application rejected successfully";
+    }
+
+    public List<ApplicationDto> getApplications() {
+        List<Application> applications = applicationRepository.findAll();
+        return applicationMapper.toDto(applications);
     }
 }

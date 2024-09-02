@@ -14,6 +14,6 @@ public class ReviewWithClientDto {
     private Long id;
     private Integer rating;
     private String comment;
-    private Long workerId;
+    private String workerName;
     private String clientName;
 }

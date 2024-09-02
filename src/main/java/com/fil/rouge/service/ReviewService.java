@@ -56,11 +56,11 @@ public class ReviewService {
         reviewRepository.deleteById(id);
     }
 
-    public ReviewDto getReview(Long id) {
+    public ReviewWithClientDto getReview(Long id) {
 
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
-        return reviewMapper.toDto(review);
+        return reviewMapper.toReviewWithClientDto(review);
     }
 
     public List<ReviewWithClientDto> getReviewsByWorker(Long workerId) {

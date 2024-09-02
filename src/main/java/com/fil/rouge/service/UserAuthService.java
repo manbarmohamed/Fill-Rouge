@@ -7,9 +7,11 @@ import com.fil.rouge.dto.UpdateProfileDto;
 import com.fil.rouge.exception.InvalidPasswordException;
 import com.fil.rouge.exception.UserNotFoundException;
 import com.fil.rouge.mapper.UserMapper;
+import com.fil.rouge.model.Admin;
 import com.fil.rouge.model.Client;
 import com.fil.rouge.model.User;
 import com.fil.rouge.model.Worker;
+import com.fil.rouge.repository.AdminRepository;
 import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.UserRepository;
 import com.fil.rouge.repository.WorkerRepository;
@@ -38,6 +40,7 @@ public class UserAuthService {
 
     private final UserRepository userRepository;
 
+    private final AdminRepository adminRepository;
 
     private final WorkerRepository workerRepository;
 
@@ -51,8 +54,6 @@ public class UserAuthService {
     private final AuthenticationManager authenticationManager;
 
 
-    private final UserDetailsService userDetailsService;
-
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public void signup(SignupDto signupDto) {
@@ -60,10 +61,15 @@ public class UserAuthService {
             Client client = userMapper.signupDtoToClient(signupDto);
             client.setPassword(encoder.encode(signupDto.getPassword()));
             clientRepository.save(client);
-        } else {
+        } else if (signupDto.getSkill() !=null){
             Worker worker = userMapper.signupDtoToWorker(signupDto);
             worker.setPassword(encoder.encode(signupDto.getPassword()));
             workerRepository.save(worker);
+        }
+        else {
+            Admin admin = userMapper.signupDtoToAdmin(signupDto);
+            admin.setPassword(encoder.encode(signupDto.getPassword()));
+            adminRepository.save(admin);
         }
     }
 //    public JwtResponse login(LoginDto loginDto) {
@@ -94,14 +100,12 @@ public class UserAuthService {
 
         if (authentication.isAuthenticated()) {
             User user = userRepository.findByUsername(loginDto.getUsername());
-            DiscriminatorValue roleAnnotation = user.getClass().getAnnotation(DiscriminatorValue.class);
-            String role = roleAnnotation.value();
-            String token = jwtUtils.generateToken(user, role);
+            String token = jwtUtils.generateToken(user, user.getRole());
 
             return JwtResponse.builder()
                     .token(token)
                     .username(user.getUsername())
-                    .role(role)
+                    .role(user.getRole())
                     .build();
         } else {
             throw new UsernameNotFoundException("Invalid user request.");

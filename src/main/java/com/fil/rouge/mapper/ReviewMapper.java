@@ -31,7 +31,7 @@ public interface ReviewMapper {
     Review toEntity(ReviewUpdateDto updateDto);
 
     @Mapping(source = "client.name", target = "clientName")
-    @Mapping(source = "worker.id", target = "workerId")
+    @Mapping(source = "worker.name", target = "workerName")
     ReviewWithClientDto toReviewWithClientDto(Review review);
 
     List<ReviewWithClientDto> toReviewWithClientDtoList(List<Review> reviews);

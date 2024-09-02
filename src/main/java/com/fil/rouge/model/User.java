@@ -1,6 +1,7 @@
 package com.fil.rouge.model;
 
 
+import com.fil.rouge.emuns.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,16 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-public abstract class User implements UserDetails {
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        DiscriminatorValue roleAnnotation = this.getClass().getAnnotation(DiscriminatorValue.class);
-        String roleName = roleAnnotation.value();
-        return List.of(new SimpleGrantedAuthority("ROLE_" + roleName));
-    }
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +29,7 @@ public abstract class User implements UserDetails {
     private String name;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
 

@@ -36,8 +36,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDto> getReview(@PathVariable Long id) {
-        ReviewDto review = reviewService.getReview(id);
+    public ResponseEntity<ReviewWithClientDto> getReview(@PathVariable("id") Long id) {
+        ReviewWithClientDto review = reviewService.getReview(id);
         return ResponseEntity.ok(review);
     }
 

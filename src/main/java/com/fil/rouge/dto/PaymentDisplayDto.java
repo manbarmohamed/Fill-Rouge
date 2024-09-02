@@ -1,5 +1,6 @@
 package com.fil.rouge.dto;
 
+import com.fil.rouge.emuns.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,5 @@ public class PaymentDisplayDto {
     private Double amount;
     private String clientName;
     private String workerName;
-    private String status; // Payment status
+    private PaymentStatus status; // Payment status
 }

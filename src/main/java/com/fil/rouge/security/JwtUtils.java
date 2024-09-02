@@ -1,5 +1,7 @@
 package com.fil.rouge.security;
 
+import com.fil.rouge.emuns.Role;
+import com.fil.rouge.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -52,7 +54,7 @@ public class JwtUtils {
         }
         return false;
     }
-    public String generateToken(UserDetails userDetails, String role) {
+    public String generateToken(User userDetails, Role role) {
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())

@@ -43,7 +43,7 @@ public class TaskController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('CLIENT')")
+    //@PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<List<TaskDto>> getTasks() {
         List<TaskDto> tasks = taskService.getTasks();
         return new ResponseEntity<>(tasks, HttpStatus.OK);

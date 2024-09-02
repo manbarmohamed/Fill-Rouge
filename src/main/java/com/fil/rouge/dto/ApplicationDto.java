@@ -1,6 +1,7 @@
 package com.fil.rouge.dto;
 
 
+import com.fil.rouge.emuns.ApplicationStatus;
 import com.fil.rouge.model.Worker;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class ApplicationDto {
 
     private Long id;
 
+    private ApplicationStatus status;
 
     private Long taskId;
 
