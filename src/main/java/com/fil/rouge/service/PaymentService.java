@@ -76,9 +76,7 @@ public class PaymentService {
 
     // List all payments
     public List<PaymentDisplayDto> getAllPayments() {
-        return paymentRepository.findAll().stream()
-                .map(paymentMapper::toDisplayDto)
-                .toList();
+        return paymentMapper.toDisplayDto(paymentRepository.findAll());
     }
 
     // List payments by client ID

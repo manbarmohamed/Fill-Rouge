@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
 
@@ -14,6 +16,11 @@ public interface PaymentMapper {
     @Mapping(source = "worker.name", target = "workerName")
     @Mapping(source = "status", target = "status")
     PaymentDisplayDto toDisplayDto(Payment payment);
+
+    @Mapping(source = "client.name", target = "clientName")
+    @Mapping(source = "worker.name", target = "workerName")
+    @Mapping(source = "status", target = "status")
+    List<PaymentDisplayDto> toDisplayDto(List<Payment> payment);
 
     @Mapping(source = "clientId", target = "client.id")
     @Mapping(source = "workerId", target = "worker.id")
