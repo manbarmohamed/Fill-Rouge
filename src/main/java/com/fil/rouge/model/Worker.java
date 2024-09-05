@@ -18,7 +18,7 @@ public class Worker extends User {
 
    @Enumerated(EnumType.STRING)
     private Skill skill;
-    private Double balance;
+    private double balance;
 
     @OneToMany(mappedBy = "worker")
     private List<Application> applicationList;
