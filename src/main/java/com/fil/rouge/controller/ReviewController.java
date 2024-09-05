@@ -1,8 +1,6 @@
 package com.fil.rouge.controller;
 
 import com.fil.rouge.dto.ReviewDto;
-import com.fil.rouge.dto.ReviewUpdateDto;
-import com.fil.rouge.dto.ReviewWithClientDto;
 import com.fil.rouge.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -24,7 +23,7 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateDto reviewDto) {
+    public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto reviewDto) {
         ReviewDto updatedReview = reviewService.updateReview(id, reviewDto);
         return ResponseEntity.ok(updatedReview);
     }
@@ -36,14 +35,14 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewWithClientDto> getReview(@PathVariable("id") Long id) {
-        ReviewWithClientDto review = reviewService.getReview(id);
-        return ResponseEntity.ok(review);
+    public ResponseEntity<ReviewDto> getReview(@PathVariable Long id) {
+        ReviewDto reviewDto = reviewService.getReview(id);
+        return ResponseEntity.ok(reviewDto);
     }
 
     @GetMapping("/worker/{workerId}")
-    public ResponseEntity<List<ReviewWithClientDto>> getReviewsByWorker(@PathVariable("workerId") Long workerId) {
-        List<ReviewWithClientDto> reviews = reviewService.getReviewsByWorker(workerId);
+    public ResponseEntity<List<ReviewDto>> getReviewsByWorker(@PathVariable Long workerId) {
+        List<ReviewDto> reviews = reviewService.getReviewsByWorker(workerId);
         return ResponseEntity.ok(reviews);
     }
 }
