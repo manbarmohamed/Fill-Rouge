@@ -23,4 +23,8 @@ public class TaskDto {
     private Categories category;
     private Double price;
     private LocalDate deadline;
+
+    // New fields for client information
+    private String clientName;
+    private String companyName;
 }
