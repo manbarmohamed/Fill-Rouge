@@ -1,8 +1,6 @@
 package com.fil.rouge.service;
 
 import com.fil.rouge.dto.ReviewDto;
-import com.fil.rouge.dto.ReviewUpdateDto;
-import com.fil.rouge.dto.ReviewWithClientDto;
 import com.fil.rouge.exception.ClientNotFoundException;
 import com.fil.rouge.exception.ReviewNotFoundException;
 import com.fil.rouge.exception.WorkerNotFoundException;
@@ -28,7 +26,6 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     public ReviewDto createReview(ReviewDto reviewDto) {
-
         Client client = clientRepository.findById(reviewDto.getClientId())
                 .orElseThrow(() -> new ClientNotFoundException("Client not found"));
         Worker worker = workerRepository.findById(reviewDto.getWorkerId())
@@ -41,8 +38,7 @@ public class ReviewService {
         return reviewMapper.toDto(review);
     }
 
-    public ReviewDto updateReview(Long id, ReviewUpdateDto updateDto) {
-
+    public ReviewDto updateReview(Long id, ReviewDto updateDto) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
 
@@ -52,19 +48,18 @@ public class ReviewService {
     }
 
     public void deleteReview(Long id) {
-
         reviewRepository.deleteById(id);
     }
 
-    public ReviewWithClientDto getReview(Long id) {
-
+    public ReviewDto getReview(Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
-        return reviewMapper.toReviewWithClientDto(review);
+        return reviewMapper.toDto(review);
     }
 
-    public List<ReviewWithClientDto> getReviewsByWorker(Long workerId) {
+    public List<ReviewDto> getReviewsByWorker(Long workerId) {
         List<Review> reviews = reviewRepository.findByWorkerId(workerId);
-        return reviewMapper.toReviewWithClientDtoList(reviews);
+        return reviewMapper.toDtoList(reviews);
     }
 }
+
