@@ -48,7 +48,7 @@ public class ApplicationService {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
         application.setStatus(ApplicationStatus.ACCEPTED);
-        Application updatedApplication = applicationRepository.save(application);
+        applicationRepository.save(application);
         //emailService.sendEmail(updatedApplication);
         return "Application accepted successfully";
     }
@@ -57,7 +57,7 @@ public class ApplicationService {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
         application.setStatus(ApplicationStatus.REJECTED);
-        Application updatedApplication = applicationRepository.save(application);
+        applicationRepository.save(application);
        //emailService.sendEmail(updatedApplication);
         return "Application rejected successfully";
     }
