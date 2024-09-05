@@ -6,9 +6,13 @@ import com.fil.rouge.emuns.Categories;
 import com.fil.rouge.emuns.TaskStatus;
 import com.fil.rouge.exception.TaskNotFoundException;
 import com.fil.rouge.mapper.TaskMapper;
+import com.fil.rouge.model.Client;
 import com.fil.rouge.model.Task;
+import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +22,15 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final ClientRepository clientRepository;
     private final TaskMapper taskMapper;
 
     public TaskDto createTask(TaskDto taskDto) {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Client client = clientRepository.findByUsername(loggedInUser.getName());
         Task task = taskMapper.toEntity(taskDto);
         task.setStatus(TaskStatus.PENDING);
+        task.setClient(client);
         task = taskRepository.save(task);
         return taskMapper.toDto(task);
     }
