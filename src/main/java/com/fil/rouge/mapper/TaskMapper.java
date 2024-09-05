@@ -6,12 +6,16 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
 
-    Task toEntity(TaskDto taskDto);
+    // Mapping from Task entity to TaskDto including clientName and companyName
+    @Mapping(source = "client.name", target = "clientName")
+    @Mapping(source = "client.companyName", target = "companyName")
     TaskDto toDto(Task task);
+
+    Task toEntity(TaskDto taskDto);
+
     List<Task> toEntity(List<TaskDto> taskDto);
     List<TaskDto> toDto(List<Task> task);
 
