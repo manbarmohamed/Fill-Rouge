@@ -56,7 +56,8 @@ public class PaymentService {
     public PaymentDisplayDto processPayment(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
-
+        var amount = payment.getWorker().getBalance()+payment.getAmount();
+        payment.getWorker().setBalance(amount);
         payment.setStatus(PaymentStatus.COMPLETED);
         Payment updatedPayment = paymentRepository.save(payment);
 
