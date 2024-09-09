@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class TaskController {
 
     private final TaskService taskService;
@@ -22,6 +23,12 @@ public class TaskController {
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
         TaskDto createdTask = taskService.createTask(taskDto);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<TaskDto> getTask(@PathVariable("id") long id) {
+        TaskDto taskDto = taskService.getTaskById(id);
+        return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

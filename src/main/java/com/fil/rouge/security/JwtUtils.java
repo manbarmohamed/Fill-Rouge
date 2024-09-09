@@ -5,14 +5,12 @@ import com.fil.rouge.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
-import static java.time.LocalTime.now;
 
 @Component
 public class JwtUtils {

@@ -47,6 +47,7 @@ public class ApplicationService {
     public String acceptApplication(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
+
         application.setStatus(ApplicationStatus.ACCEPTED);
         applicationRepository.save(application);
         //emailService.sendEmail(updatedApplication);
