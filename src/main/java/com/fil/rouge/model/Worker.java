@@ -12,14 +12,13 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("WORKER")
 public class Worker extends User {
 
 
    @Enumerated(EnumType.STRING)
     private Skill skill;
     private double balance;
-
+    private int experience;
     @OneToMany(mappedBy = "worker")
     private List<Application> applicationList;
     @OneToMany(mappedBy = "worker")

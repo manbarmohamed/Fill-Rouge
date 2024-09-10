@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("CLIENT")
 public class Client extends User{
 
     private String companyName;
