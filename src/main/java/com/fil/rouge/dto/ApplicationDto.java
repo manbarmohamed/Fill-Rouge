@@ -17,7 +17,7 @@ public class ApplicationDto {
 
     private Long id;
 
-    private ApplicationStatus status;
+    //private ApplicationStatus status;
 
     private Long taskId;
 
