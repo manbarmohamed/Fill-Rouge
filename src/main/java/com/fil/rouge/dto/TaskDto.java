@@ -27,4 +27,9 @@ public class TaskDto {
     // New fields for client information
     private String clientName;
     private String companyName;
+    private String address;
+    private String phone;
+    private String email;
+    private String website;
+    private String descriptionCompany;
 }
