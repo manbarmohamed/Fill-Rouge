@@ -1,7 +1,9 @@
 package com.fil.rouge.controller;
 
 
+import com.fil.rouge.dto.ApplicationDisplayDto;
 import com.fil.rouge.dto.ApplicationDto;
+import com.fil.rouge.exception.ApplicationNotFoundException;
 import com.fil.rouge.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,5 +42,27 @@ public class ApplicationController {
     public ResponseEntity<String> rejectApplication(@PathVariable("id") Long id) {
         String rejectedApplication = applicationService.rejectApplication(id);
         return new ResponseEntity<>(rejectedApplication, HttpStatus.OK);
+    }
+
+    @GetMapping("/worker/{workerId}")
+    public ResponseEntity<List<ApplicationDisplayDto>> getApplicationsByWorkerId(@PathVariable Long workerId) {
+        List<ApplicationDisplayDto> applications = applicationService.findApplicationsByWorkerId(workerId);
+        return ResponseEntity.ok(applications);
+    }
+
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity<List<ApplicationDisplayDto>> getApplicationsByTaskId(@PathVariable Long taskId) {
+        List<ApplicationDisplayDto> applications = applicationService.findApplicationsByTaskId(taskId);
+        return ResponseEntity.ok(applications);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicationDisplayDto> getApplicationById(@PathVariable Long id) {
+        try {
+            ApplicationDisplayDto application = applicationService.findApplicationsById(id);
+            return ResponseEntity.ok(application);
+        } catch (ApplicationNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
