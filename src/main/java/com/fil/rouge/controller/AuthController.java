@@ -4,11 +4,8 @@ import com.fil.rouge.dto.JwtResponse;
 import com.fil.rouge.dto.LoginDto;
 import com.fil.rouge.dto.SignupDto;
 
-import com.fil.rouge.dto.UpdateProfileDto;
-import com.fil.rouge.model.User;
 import com.fil.rouge.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +29,5 @@ public class AuthController {
         JwtResponse user = authService.login(loginDto);
 
         return ResponseEntity.ok(user);
-    }
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<User> updateProfile(@PathVariable Long userId, @RequestBody UpdateProfileDto updateProfileDto) {
-        User updatedUser = authService.updateProfile(userId, updateProfileDto);
-        return ResponseEntity.ok(updatedUser);
     }
 }
