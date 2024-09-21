@@ -1,6 +1,6 @@
 package com.fil.rouge.dto;
 
-import com.fil.rouge.emuns.Skill;
+import com.fil.rouge.emuns.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class SignupDto {
     private String name;
     private String username;
     private String password;
-    private String companyName; // Only for Client
-    private Skill skill; // Only for Worker
+    private Role role;
+
 }
 
