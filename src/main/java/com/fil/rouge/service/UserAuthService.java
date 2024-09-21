@@ -1,9 +1,7 @@
 package com.fil.rouge.service;
 
-import com.fil.rouge.dto.JwtResponse;
-import com.fil.rouge.dto.LoginDto;
-import com.fil.rouge.dto.SignupDto;
-import com.fil.rouge.dto.UpdateProfileDto;
+import com.fil.rouge.dto.*;
+import com.fil.rouge.emuns.Role;
 import com.fil.rouge.exception.InvalidPasswordException;
 import com.fil.rouge.exception.UserNotFoundException;
 import com.fil.rouge.mapper.UserMapper;
@@ -11,10 +9,7 @@ import com.fil.rouge.model.Admin;
 import com.fil.rouge.model.Client;
 import com.fil.rouge.model.User;
 import com.fil.rouge.model.Worker;
-import com.fil.rouge.repository.AdminRepository;
-import com.fil.rouge.repository.ClientRepository;
-import com.fil.rouge.repository.UserRepository;
-import com.fil.rouge.repository.WorkerRepository;
+import com.fil.rouge.repository.*;
 import com.fil.rouge.security.JwtUtils;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +34,7 @@ public class UserAuthService {
     private final ClientRepository clientRepository;
 
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
 
     private final AdminRepository adminRepository;
 
@@ -56,22 +52,49 @@ public class UserAuthService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+
     public void signup(SignupDto signupDto) {
-        if (signupDto.getCompanyName() != null) {
-            Client client = userMapper.signupDtoToClient(signupDto);
-            client.setPassword(encoder.encode(signupDto.getPassword()));
+        if (signupDto.getRole() == Role.CLIENT) {
+            SignupDto clientSignupDto =  signupDto;
+            Client client = userMapper.clientSignupDtoToClient(clientSignupDto);
+            client.setPassword(encoder.encode(clientSignupDto.getPassword()));
+            if (client.getCompany() != null) {
+                companyRepository.save(client.getCompany());
+            }
             clientRepository.save(client);
-        } else if (signupDto.getSkill() !=null){
-            Worker worker = userMapper.signupDtoToWorker(signupDto);
-            worker.setPassword(encoder.encode(signupDto.getPassword()));
+        } else if (signupDto.getRole() == Role.WORKER) {
+            SignupDto workerSignupDto =signupDto;
+            Worker worker = userMapper.workerSignupDtoToWorker(workerSignupDto);
+            worker.setPassword(encoder.encode(workerSignupDto.getPassword()));
             workerRepository.save(worker);
-        }
-        else {
-            Admin admin = userMapper.signupDtoToAdmin(signupDto);
-            admin.setPassword(encoder.encode(signupDto.getPassword()));
+
+        } else if (signupDto.getRole() == Role.ADMIN) {
+            SignupDto adminSignupDto =signupDto;
+            Admin admin = userMapper.adminSignupDtoToAdmin(adminSignupDto);
+            admin.setPassword(encoder.encode(adminSignupDto.getPassword()));
             adminRepository.save(admin);
+
         }
     }
+
+
+
+//    public void signup(SignupDto signupDto) {
+//        if (signupDto.getCompanyName() != null) {
+//            Client client = userMapper.signupDtoToClient(signupDto);
+//            client.setPassword(encoder.encode(signupDto.getPassword()));
+//            clientRepository.save(client);
+//        } else if (signupDto.getSkill() !=null){
+//            Worker worker = userMapper.signupDtoToWorker(signupDto);
+//            worker.setPassword(encoder.encode(signupDto.getPassword()));
+//            workerRepository.save(worker);
+//        }
+//        else {
+//            Admin admin = userMapper.signupDtoToAdmin(signupDto);
+//            admin.setPassword(encoder.encode(signupDto.getPassword()));
+//            adminRepository.save(admin);
+//        }
+//    }
 //    public JwtResponse login(LoginDto loginDto) {
 //        Authentication authentication = authenticationManager.authenticate(
 //                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
@@ -114,31 +137,31 @@ public class UserAuthService {
 
 
 
-    public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        if (updateProfileDto.getOldPassword() != null && updateProfileDto.getNewPassword() != null) {
-            if (!encoder.matches(updateProfileDto.getOldPassword(), user.getPassword())) {
-                throw new InvalidPasswordException("Old password is incorrect");
-            }
-            user.setPassword(encoder.encode(updateProfileDto.getNewPassword()));
-        }
-
-        userMapper.updateUserFromDto(updateProfileDto, user);
-
-        if (user instanceof Client) {
-            Client client = (Client) user;
-            userMapper.updateClientFromDto(updateProfileDto, client);
-            clientRepository.save(client);
-        } else if (user instanceof Worker) {
-            Worker worker = (Worker) user;
-            userMapper.updateWorkerFromDto(updateProfileDto, worker);
-            workerRepository.save(worker);
-        }
-
-        return userRepository.save(user);
-    }
+//    public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new UserNotFoundException("User not found"));
+//
+//        if (updateProfileDto.getOldPassword() != null && updateProfileDto.getNewPassword() != null) {
+//            if (!encoder.matches(updateProfileDto.getOldPassword(), user.getPassword())) {
+//                throw new InvalidPasswordException("Old password is incorrect");
+//            }
+//            user.setPassword(encoder.encode(updateProfileDto.getNewPassword()));
+//        }
+//
+//        userMapper.updateUserFromDto(updateProfileDto, user);
+//
+//        if (user instanceof Client) {
+//            Client client = (Client) user;
+//            userMapper.updateClientFromDto(updateProfileDto, client);
+//            clientRepository.save(client);
+//        } else if (user instanceof Worker) {
+//            Worker worker = (Worker) user;
+//            userMapper.updateWorkerFromDto(updateProfileDto, worker);
+//            workerRepository.save(worker);
+//        }
+//
+//        return userRepository.save(user);
+//    }
 
 }
 
