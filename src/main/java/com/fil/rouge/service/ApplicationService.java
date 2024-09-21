@@ -1,5 +1,6 @@
 package com.fil.rouge.service;
 
+import com.fil.rouge.dto.ApplicationDisplayDto;
 import com.fil.rouge.dto.ApplicationDto;
 import com.fil.rouge.emuns.ApplicationStatus;
 import com.fil.rouge.exception.ApplicationNotFoundException;
@@ -66,5 +67,18 @@ public class ApplicationService {
     public List<ApplicationDto> getApplications() {
         List<Application> applications = applicationRepository.findAll();
         return applicationMapper.toDto(applications);
+    }
+
+
+    public List<ApplicationDisplayDto> findApplicationsByWorkerId(Long workerId) {
+        return applicationMapper.toDisplayDto(applicationRepository.findApplicationsByWorkerId(workerId));
+    }
+
+    public List<ApplicationDisplayDto> findApplicationsByTaskId(Long taskId) {
+        return applicationMapper.toDisplayDto(applicationRepository.findApplicationsByTaskId(taskId));
+    }
+
+    public ApplicationDisplayDto findApplicationsById(Long id) {
+        return applicationMapper.toDisplayDto(applicationRepository.findById(id).orElseThrow(()-> new ApplicationNotFoundException("Application Not Found")));
     }
 }
