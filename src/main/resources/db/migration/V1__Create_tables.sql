@@ -1,6 +1,4 @@
--- V1__Create_tables.sql
 
--- إنشاء جدول User
 CREATE TABLE user (
                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
                       name VARCHAR(255),
@@ -9,20 +7,17 @@ CREATE TABLE user (
                       role ENUM('CLIENT', 'WORKER', 'ADMIN')
 );
 
--- إنشاء جدول Admin
 CREATE TABLE admin (
                        id BIGINT PRIMARY KEY,
                        FOREIGN KEY (id) REFERENCES user(id)
 );
 
--- إنشاء جدول Client
 CREATE TABLE client (
                         id BIGINT PRIMARY KEY,
                         company_name VARCHAR(255),
                         FOREIGN KEY (id) REFERENCES user(id)
 );
 
--- إنشاء جدول Worker
 CREATE TABLE worker (
                         id BIGINT PRIMARY KEY,
                         skill ENUM('WEB_DEVELOPMENT', 'GRAPHIC_DESIGN', 'CONTENT_WRITING', 'SEO', 'DIGITAL_MARKETING',
@@ -35,7 +30,6 @@ CREATE TABLE worker (
                         FOREIGN KEY (id) REFERENCES user(id)
 );
 
--- إنشاء جدول Task
 CREATE TABLE task (
                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
                       title VARCHAR(255),
@@ -51,7 +45,6 @@ CREATE TABLE task (
                       FOREIGN KEY (client_id) REFERENCES client(id)
 );
 
--- إنشاء جدول Application
 CREATE TABLE application (
                              id BIGINT PRIMARY KEY AUTO_INCREMENT,
                              status ENUM('PENDING', 'ACCEPTED', 'REJECTED'),
@@ -61,7 +54,6 @@ CREATE TABLE application (
                              FOREIGN KEY (worker_id) REFERENCES worker(id)
 );
 
--- إنشاء جدول Review
 CREATE TABLE review (
                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                         rating INT,
@@ -72,7 +64,6 @@ CREATE TABLE review (
                         FOREIGN KEY (client_id) REFERENCES client(id)
 );
 
--- إنشاء جدول Payment
 CREATE TABLE payment (
                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          amount DOUBLE,
