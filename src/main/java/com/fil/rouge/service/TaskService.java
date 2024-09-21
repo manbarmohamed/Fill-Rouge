@@ -45,7 +45,7 @@ public class TaskService {
     }
 
     public List<TaskDto> searchTasks(String keyword) {
-        List<Task> tasks = taskRepository.findByTitleContainingOrDescriptionContaining(keyword, keyword);
+        List<Task> tasks = taskRepository.findByTitleContainingOrDescriptionContaining(keyword, keyword).stream().filter(task -> task.getStatus()==TaskStatus.ACCEPTED).toList();
         return tasks.stream().map(taskMapper::toDto).toList();
     }
 
