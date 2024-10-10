@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  fil_rouge:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - filrouge_db
+    networks:
+      - filrouge-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://filrouge_db:3306/filrouge_db?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_SECURITY_USER_PASSWORD: user
+      SPRING_SECURITY_USER_NAME: user
+      SPRING_MAIN_ALLOW_CIRCULAR_REFERENCES: "true"
+      SPRING_MVC_DISPATCH_OPTIONS_REQUEST: "true"
+      SPRING_MAIN_ALLOW_BEAN_DEFINITION_OVERRIDING: "true"
+      JWT_EXPIRATION: 86400000
+
+  filrouge_db:
+    image: "mysql:latest"
+    environment:
+      MYSQL_DATABASE: filrouge_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3333:3306"
+    volumes:
+      - filrouge-db:/var/lib/mysql
+    networks:
+      - filrouge-network
+
+networks:
+  filrouge-network:
+    driver: bridge
+
+volumes:
+  filrouge-db:
