@@ -11,33 +11,26 @@ import com.fil.rouge.model.Worker;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
+import org.springframework.web.multipart.MultipartFile;
 
-@Mapper(componentModel = "spring")
+import java.io.IOException;
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserProfileMapper {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "profileImage", ignore = true)
     void updateUserFromDto(UserProfileUpdateDto dto, @MappingTarget User user);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "balance", ignore = true)
-    @Mapping(target = "applicationList", ignore = true)
-    @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "payments", ignore = true)
+    @Mapping(target = "profileImage", ignore = true)
     void updateWorkerFromDto(WorkerProfileUpdateDto dto, @MappingTarget Worker worker);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "tasks", ignore = true)
-    @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "payments", ignore = true)
+    @Mapping(target = "profileImage", ignore = true)
     void updateClientFromDto(ClientProfileUpdateDto dto, @MappingTarget Client client);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "clients", ignore = true)
     void updateCompanyFromDto(CompanyDto dto, @MappingTarget Company company);
+
+    default byte[] mapMultipartFileToByteArray(MultipartFile file) throws IOException {
+        return file != null ? file.getBytes() : null;
+    }
 }

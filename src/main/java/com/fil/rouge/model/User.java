@@ -30,5 +30,8 @@ public abstract class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Lob
+    @Column(name = "profile_image", columnDefinition="LONGBLOB")
+    private byte[] profileImage;
 }
 

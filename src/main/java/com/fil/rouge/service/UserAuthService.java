@@ -30,28 +30,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAuthService {
 
-
     private final ClientRepository clientRepository;
-
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-
     private final AdminRepository adminRepository;
-
     private final WorkerRepository workerRepository;
-
-
     private final UserMapper userMapper;
-
-
     private final JwtUtils jwtUtils;
-
-
     private final AuthenticationManager authenticationManager;
-
-
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
 
     public void signup(SignupDto signupDto) {
         if (signupDto.getRole() == Role.CLIENT) {
@@ -77,45 +64,6 @@ public class UserAuthService {
         }
     }
 
-
-
-//    public void signup(SignupDto signupDto) {
-//        if (signupDto.getCompanyName() != null) {
-//            Client client = userMapper.signupDtoToClient(signupDto);
-//            client.setPassword(encoder.encode(signupDto.getPassword()));
-//            clientRepository.save(client);
-//        } else if (signupDto.getSkill() !=null){
-//            Worker worker = userMapper.signupDtoToWorker(signupDto);
-//            worker.setPassword(encoder.encode(signupDto.getPassword()));
-//            workerRepository.save(worker);
-//        }
-//        else {
-//            Admin admin = userMapper.signupDtoToAdmin(signupDto);
-//            admin.setPassword(encoder.encode(signupDto.getPassword()));
-//            adminRepository.save(admin);
-//        }
-//    }
-//    public JwtResponse login(LoginDto loginDto) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
-//        );
-//
-//        if (authentication.isAuthenticated()) {
-//            User user =userRepository.findByUsername(loginDto.getUsername());
-//           String token = jwtUtils.generateToken((UserDetails) user);
-//            String role = user.getClass().getSimpleName().toUpperCase();
-//
-//            return  new JwtResponse().builder()
-//                   .token(token)
-//                    .username(user.getUsername())
-//                    .role(role)
-//                    .build();
-//        } else {
-//            throw new UsernameNotFoundException("Invalid user request.");
-//        }
-//    }
-
-
     public JwtResponse login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
@@ -134,34 +82,4 @@ public class UserAuthService {
             throw new UsernameNotFoundException("Invalid user request.");
         }
     }
-
-
-
-//    public User updateProfile(Long userId, UpdateProfileDto updateProfileDto) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException("User not found"));
-//
-//        if (updateProfileDto.getOldPassword() != null && updateProfileDto.getNewPassword() != null) {
-//            if (!encoder.matches(updateProfileDto.getOldPassword(), user.getPassword())) {
-//                throw new InvalidPasswordException("Old password is incorrect");
-//            }
-//            user.setPassword(encoder.encode(updateProfileDto.getNewPassword()));
-//        }
-//
-//        userMapper.updateUserFromDto(updateProfileDto, user);
-//
-//        if (user instanceof Client) {
-//            Client client = (Client) user;
-//            userMapper.updateClientFromDto(updateProfileDto, client);
-//            clientRepository.save(client);
-//        } else if (user instanceof Worker) {
-//            Worker worker = (Worker) user;
-//            userMapper.updateWorkerFromDto(updateProfileDto, worker);
-//            workerRepository.save(worker);
-//        }
-//
-//        return userRepository.save(user);
-//    }
-
 }
-
