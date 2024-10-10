@@ -5,9 +5,15 @@ import com.fil.rouge.dto.PaymentDisplayDto;
 import com.fil.rouge.emuns.PaymentStatus;
 import com.fil.rouge.exception.PaymentNotFoundException;
 import com.fil.rouge.mapper.PaymentMapper;
+import com.fil.rouge.model.Client;
 import com.fil.rouge.model.Payment;
+import com.fil.rouge.model.Worker;
+import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.PaymentRepository;
+import com.fil.rouge.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +24,8 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
+    private final ClientRepository clientRepository;
+    private final WorkerRepository workerRepository;
 
     // Create a new payment
     public PaymentDisplayDto createPayment(PaymentCreateDto paymentCreateDto) {
@@ -56,7 +64,7 @@ public class PaymentService {
     public PaymentDisplayDto processPayment(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
-        var amount = payment.getWorker().getBalance()+payment.getAmount();
+        var amount = payment.getWorker().getBalance() + payment.getAmount();
         payment.getWorker().setBalance(amount);
         payment.setStatus(PaymentStatus.COMPLETED);
         Payment updatedPayment = paymentRepository.save(payment);
@@ -81,16 +89,44 @@ public class PaymentService {
     }
 
     // List payments by client ID
-    public List<PaymentDisplayDto> getPaymentsByClient(Long clientId) {
-        return paymentRepository.findByClientId(clientId).stream()
+    public List<PaymentDisplayDto> getPaymentsByClient() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Client client = clientRepository.findByUsername(loggedInUser.getName());
+        return paymentRepository.findByClientId(client.getId()).stream()
                 .map(paymentMapper::toDisplayDto)
                 .toList();
     }
 
     // List payments by worker ID
-    public List<PaymentDisplayDto> getPaymentsByWorker(Long workerId) {
-        return paymentRepository.findByWorkerId(workerId).stream()
+    public List<PaymentDisplayDto> getPaymentsByWorker() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Worker worker = workerRepository.findByUsername(loggedInUser.getName());
+        return paymentRepository.findByWorkerId(worker.getId()).stream()
                 .map(paymentMapper::toDisplayDto)
                 .toList();
+    }
+
+    //Dashboard Data
+
+    public Long countAllPayments() {
+        return paymentRepository.countAllPayments();
+    }
+
+    public Long countPendingPayments() {
+        return paymentRepository.countPaymentsByStatus(PaymentStatus.PENDING);
+    }
+
+    public Long countCompletedPayments() {
+        return paymentRepository.countPaymentsByStatus(PaymentStatus.COMPLETED);
+    }
+
+    public Long countRefundedPayments() {
+        return paymentRepository.countPaymentsByStatus(PaymentStatus.REFUNDED);
+    }
+
+    public List<Payment> findPaymentsByWorkerId() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Worker worker = workerRepository.findByUsername(loggedInUser.getName());
+        return paymentRepository.findPaymentsByWorkerId(worker.getId());
     }
 }

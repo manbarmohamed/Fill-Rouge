@@ -55,13 +55,41 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getAllPayments());
     }
 
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<PaymentDisplayDto>> getPaymentsByClient(@PathVariable Long clientId) {
-        return ResponseEntity.ok(paymentService.getPaymentsByClient(clientId));
+    @GetMapping("/client")
+    public ResponseEntity<List<PaymentDisplayDto>> getPaymentsByClient() {
+        return ResponseEntity.ok(paymentService.getPaymentsByClient());
     }
 
-    @GetMapping("/worker/{workerId}")
-    public ResponseEntity<List<PaymentDisplayDto>> getPaymentsByWorker(@PathVariable Long workerId) {
-        return ResponseEntity.ok(paymentService.getPaymentsByWorker(workerId));
+    @GetMapping("/worker")
+    public ResponseEntity<List<PaymentDisplayDto>> getPaymentsByWorker() {
+        return ResponseEntity.ok(paymentService.getPaymentsByWorker());
     }
+
+    //Dashboard data
+
+    @GetMapping("/payments/count")
+    public ResponseEntity<Long> getTotalPaymentsCount() {
+        Long count = paymentService.countAllPayments();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/payments/count/pending")
+    public ResponseEntity<Long> getPendingPaymentsCount() {
+        Long count = paymentService.countPendingPayments();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/payments/count/completed")
+    public ResponseEntity<Long> getCompletedPaymentsCount() {
+        Long count = paymentService.countCompletedPayments();
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/payments/count/refunded")
+    public ResponseEntity<Long> getRefundedPaymentsCount() {
+        Long count = paymentService.countRefundedPayments();
+        return ResponseEntity.ok(count);
+    }
+
+
 }
