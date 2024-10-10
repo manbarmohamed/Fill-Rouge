@@ -1,5 +1,6 @@
 package com.fil.rouge.model;
 
+import com.fil.rouge.dto.TaskDto;
 import com.fil.rouge.emuns.Categories;
 import com.fil.rouge.emuns.TaskStatus;
 import jakarta.persistence.*;
@@ -30,9 +31,14 @@ public class Task {
     private TaskStatus status;
     private Double price;
     private LocalDate deadline;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] taskImage;
     @OneToMany(mappedBy = "task")
     private List<Application> applications;
     @ManyToOne
     private Client client;
+
+
 
 }

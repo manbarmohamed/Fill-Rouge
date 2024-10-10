@@ -4,6 +4,7 @@ import com.fil.rouge.dto.TaskDto;
 import com.fil.rouge.model.Task;
 import org.mapstruct.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -19,7 +20,7 @@ public interface TaskMapper {
     @Mapping(source = "client.company.website", target = "website")  // استخراج اسم الشركة من كيان Company المرتبط
     @Mapping(source = "client.company.description", target = "descriptionCompany")  // استخراج اسم الشركة من كيان Company المرتبط
     TaskDto toDto(Task task);
-
+    @Mapping(target = "taskImage", source = "taskImageFile", qualifiedByName = "mapTaskImage")
     Task toEntity(TaskDto taskDto);
 
     List<Task> toEntity(List<TaskDto> taskDtoList);
@@ -27,4 +28,17 @@ public interface TaskMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Task partialUpdate(TaskDto taskDto, @MappingTarget Task task);
+
+    @Named("mapTaskImage")
+    default byte[] mapTaskImage(org.springframework.web.multipart.MultipartFile taskImageFile) {
+        if (taskImageFile == null) {
+            return null;
+        }
+        try {
+            return taskImageFile.getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
