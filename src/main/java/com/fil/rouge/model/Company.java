@@ -24,7 +24,9 @@ public class Company {
     private String email;
     private String website;
     private String description;
-
+    @Lob
+    @Column(name = "company_image", columnDefinition="LONGBLOB")
+    private byte[] companyImage;
     @OneToMany(mappedBy = "company")
     List<Client> clients;
 }
