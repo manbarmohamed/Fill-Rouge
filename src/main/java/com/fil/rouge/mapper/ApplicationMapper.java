@@ -20,14 +20,6 @@ public interface ApplicationMapper {
     @Mapping(source = "worker.id", target = "workerId")
     ApplicationDto toDto(Application application);
 
-    @Mapping(source = "task.title", target = "taskTitle")
-    @Mapping(source = "worker.name", target = "workerName")
-    ApplicationDisplayDto toDisplayDto(Application application);
-    @Mapping(source = "task.title", target = "taskTitle")
-    @Mapping(source = "worker.name", target = "workerName")
-    List<ApplicationDisplayDto> toDisplayDto(List<Application> application);
-
-
     List<Application> toEntity(List<ApplicationDto> applicationDto);
     List<ApplicationDto> toDto(List<Application> application);
 
