@@ -33,7 +33,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarQubeScanner'
 
-                        bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=BackEnd -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_SERVER} -Dsonar.login=${SONARQUBE_TOKEN} -Dsonar.java.binaries=target/classes"
+                        bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=. -Dsonar.sources=. -Dsonar.host.url=${SONARQUBE_SERVER} -Dsonar.login=${SONARQUBE_TOKEN} -Dsonar.java.binaries=target/classes"
 
                 }
             }
