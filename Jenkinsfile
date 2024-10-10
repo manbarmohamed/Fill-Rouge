@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.6.3'
+        maven 'mvn'
     }
 
     environment {
@@ -21,7 +21,7 @@ pipeline {
         stage('Build & Test filRouge') {
             steps {
 
-                    withMaven(maven: 'Maven 3.6.3') {
+                    withMaven(maven: 'mvn') {
                         bat 'mvn clean install'
 
                 }
