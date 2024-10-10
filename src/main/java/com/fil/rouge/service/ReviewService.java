@@ -12,6 +12,8 @@ import com.fil.rouge.repository.ReviewRepository;
 import com.fil.rouge.repository.ClientRepository;
 import com.fil.rouge.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     public ReviewDto createReview(ReviewDto reviewDto) {
-        Client client = clientRepository.findById(reviewDto.getClientId())
-                .orElseThrow(() -> new ClientNotFoundException("Client not found"));
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Client client = clientRepository.findByUsername(loggedInUser.getName());
         Worker worker = workerRepository.findById(reviewDto.getWorkerId())
                 .orElseThrow(() -> new WorkerNotFoundException("Worker not found"));
 
@@ -57,8 +59,10 @@ public class ReviewService {
         return reviewMapper.toDto(review);
     }
 
-    public List<ReviewDto> getReviewsByWorker(Long workerId) {
-        List<Review> reviews = reviewRepository.findByWorkerId(workerId);
+    public List<ReviewDto> getReviewsByWorker() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Worker worker = workerRepository.findByUsername(loggedInUser.getName());
+        List<Review> reviews = reviewRepository.findByWorkerId(worker.getId());
         return reviewMapper.toDtoList(reviews);
     }
 }

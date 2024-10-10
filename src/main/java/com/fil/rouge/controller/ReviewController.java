@@ -40,9 +40,9 @@ public class ReviewController {
         return ResponseEntity.ok(reviewDto);
     }
 
-    @GetMapping("/worker/{workerId}")
-    public ResponseEntity<List<ReviewDto>> getReviewsByWorker(@PathVariable Long workerId) {
-        List<ReviewDto> reviews = reviewService.getReviewsByWorker(workerId);
+    @GetMapping("/worker")
+    public ResponseEntity<List<ReviewDto>> getReviewsByWorker() {
+        List<ReviewDto> reviews = reviewService.getReviewsByWorker();
         return ResponseEntity.ok(reviews);
     }
 }

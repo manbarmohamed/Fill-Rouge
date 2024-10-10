@@ -16,7 +16,7 @@ public class ReviewDto {
     private Integer rating;    // Used for both creation and update
     private String comment;    // Used for both creation and update
     private Long workerId;     // Used for creation (worker reference)
-    private Long clientId;     // Used for creation (client reference)
+    //private Long clientId;     // Used for creation (client reference)
     private String workerName; // Used for viewing details with worker information
     private String clientName; // Used for viewing details with client information
 }
