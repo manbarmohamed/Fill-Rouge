@@ -36,4 +36,6 @@ public class Client extends User {
     public Client() {
         this.setRole(Role.CLIENT);
     }
+
+
 }
